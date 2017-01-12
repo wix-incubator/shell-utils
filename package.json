@@ -1,0 +1,46 @@
+{
+  "name": "shell-utils",
+  "version": "1.0.0",
+  "description": "Utilities for shell integration in node",
+  "license": "MIT",
+  "author": "Daniel Zlotin <zlotindaniel@gmail.com>",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "bugs": {
+    "url": "https://github.com/wix/shell-utils/issues"
+  },
+  "homepage": "https://github.com/wix/shell-utils",
+  "readme": "https://github.com/wix/shell-utils#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wix/shell-utils.git"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "build": ":",
+    "test": ":",
+    "release": "npm version patch && git push && npm publish"
+  },
+  "dependencies": {
+    "lodash": "4.x.x"
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "presets": [
+          "react-native"
+        ],
+        "retainLines": true
+      }
+    }
+  },
+  "jest": {
+    "testPathDirs": [
+      "node_modules",
+      "src"
+    ],
+    "resetMocks": true,
+    "resetModules": true
+  }
+}
