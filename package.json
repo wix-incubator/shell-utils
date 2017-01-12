@@ -24,23 +24,5 @@
   },
   "dependencies": {
     "lodash": "4.x.x"
-  },
-  "babel": {
-    "env": {
-      "test": {
-        "presets": [
-          "react-native"
-        ],
-        "retainLines": true
-      }
-    }
-  },
-  "jest": {
-    "testPathDirs": [
-      "node_modules",
-      "src"
-    ],
-    "resetMocks": true,
-    "resetModules": true
   }
 }
