@@ -4,18 +4,18 @@ const _ = require('lodash');
 function execSync(command) {
   const normalized = normalizeSpace(command);
   console.log(normalized);
-  cp.execSync(normalized, {stdio: ['inherit', 'inherit', 'inherit']});
+  cp.execSync(normalized, { stdio: ['inherit', 'inherit', 'inherit'] });
 }
 
 function execSyncSilent(command) {
   const normalized = normalizeSpace(command);
-  cp.execSync(normalized, {stdio: ['ignore', 'ignore', 'ignore']});
+  cp.execSync(normalized, { stdio: ['ignore', 'ignore', 'ignore'] });
 }
 
 function execSyncRead(command) {
   const normalized = normalizeSpace(command);
   console.log(normalized);
-  return _.trim(String(cp.execSync(normalized, {stdio: ['inherit', 'pipe', 'inherit']})));
+  return _.trim(String(cp.execSync(normalized, { stdio: ['inherit', 'pipe', 'inherit'] })));
 }
 
 function exec(command) {
@@ -26,12 +26,21 @@ function kill(process) {
   execSyncSilent(`pkill -f "${process}" || true`);
 }
 
+function which(what) {
+  try {
+    return execSyncRead(`which ${what}`);
+  } catch (e) {
+    return undefined;
+  }
+}
+
 module.exports = {
   execSync,
   execSyncSilent,
   execSyncRead,
   exec,
-  kill
+  kill,
+  which
 };
 
 const WHITESPACE_REGEX = /\s+/g;
