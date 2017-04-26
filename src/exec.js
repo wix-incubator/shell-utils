@@ -26,6 +26,10 @@ function kill(process) {
   execSyncSilent(`pkill -f "${process}" || true`);
 }
 
+function killPort(port) {
+  execSync(`lsof -t -i :${port} | xargs kill || true`);
+}
+
 function which(what) {
   try {
     return execSyncRead(`which ${what}`);
@@ -40,7 +44,8 @@ module.exports = {
   execSyncRead,
   exec,
   kill,
-  which
+  which,
+  killPort
 };
 
 const WHITESPACE_REGEX = /\s+/g;
