@@ -53,7 +53,7 @@ module.exports = {
   execSync,
   execSyncSilent,
   execSyncRead,
-  exec,
+  execAsync,
   kill,
   which,
   killPort
