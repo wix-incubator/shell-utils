@@ -18,8 +18,19 @@ function execSyncRead(command) {
   return _.trim(String(cp.execSync(normalized, { stdio: ['inherit', 'pipe', 'inherit'] })));
 }
 
-function exec(command) {
-  cp.exec(command);
+function execAsync(cmd) {
+  const normalized = normalizeSpace(command);
+  return new Promise((resolve, reject) => {
+    const child = cp.exec(normalized, (err, stdout, stderr) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve({ stdout, stderr });
+      }
+    });
+    child.stdout.pipe(process.stdout);
+    child.stderr.pipe(process.stderr);
+  });
 }
 
 function kill(process) {
