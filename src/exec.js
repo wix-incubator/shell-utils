@@ -18,7 +18,7 @@ function execSyncRead(command) {
   return _.trim(String(cp.execSync(normalized, { stdio: ['inherit', 'pipe', 'inherit'] })));
 }
 
-function execAsync(cmd) {
+function execAsync(command) {
   const normalized = normalizeSpace(command);
   return new Promise((resolve, reject) => {
     const child = cp.exec(normalized, (err, stdout, stderr) => {
