@@ -19,10 +19,25 @@
   "main": "src/index.js",
   "scripts": {
     "build": ":",
-    "test": ":",
+    "test": "jest --coverage",
     "release": "npm version patch && git push && npm publish"
   },
   "dependencies": {
     "lodash": "4.x.x"
+  },
+  "devDependencies": {
+    "jest": "20.x.x"
+  },
+  "jest": {
+    "resetModules": true,
+    "resetMocks": true,
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    }
   }
 }

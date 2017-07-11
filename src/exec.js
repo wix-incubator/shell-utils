@@ -1,15 +1,19 @@
 const cp = require('child_process');
 const _ = require('lodash');
 
-function execSync(command) {
+function execSync(command, silent = false) {
   const normalized = normalizeSpace(command);
-  console.log(normalized);
-  cp.execSync(normalized, { stdio: ['inherit', 'inherit', 'inherit'] });
+  if (!silent) console.log(normalized);
+  const io = silent ? 'ignore' : 'inherit';
+  cp.execSync(normalized, { stdio: [io, io, io] });
 }
 
 function execSyncSilent(command) {
-  const normalized = normalizeSpace(command);
-  cp.execSync(normalized, { stdio: ['ignore', 'ignore', 'ignore'] });
+  try {
+    execSync(command, true);
+  } catch (e) {
+    //
+  }
 }
 
 function execSyncRead(command) {
@@ -18,23 +22,39 @@ function execSyncRead(command) {
   return _.trim(String(cp.execSync(normalized, { stdio: ['inherit', 'pipe', 'inherit'] })));
 }
 
-function execAsync(command) {
+function execAsync(command, silent = false) {
   const normalized = normalizeSpace(command);
+  if (!silent) console.log(normalized);
   return new Promise((resolve, reject) => {
-    const child = cp.exec(normalized, (err, stdout, stderr) => {
-      if (err) {
+    const child = cp.exec(normalized, { maxBuffer: 1024 * 1024 * 10 }, (err, stdout, stderr) => {
+      if (err && !silent) {
         reject(err);
       } else {
         resolve({ stdout, stderr });
       }
     });
-    child.stdout.pipe(process.stdout);
-    child.stderr.pipe(process.stderr);
+    if (!silent) {
+      child.stdout.pipe(process.stdout);
+      child.stderr.pipe(process.stderr);
+    }
   });
 }
 
+function execAsyncSilent(command) {
+  return execAsync(command, true);
+}
+
+function execAsyncAll(...commands) {
+  const promises = _.map(commands, (cmd) => execAsync(cmd));
+  return Promise.all(promises)
+    .catch((e) => {
+      console.error(e);
+      process.exit(1);
+    });
+}
+
 function kill(process) {
-  execSyncSilent(`pkill -f "${process}" || true`);
+  execSyncSilent(`pkill -f "${process}"`);
 }
 
 function killPort(port) {
@@ -54,6 +74,8 @@ module.exports = {
   execSyncSilent,
   execSyncRead,
   execAsync,
+  execAsyncSilent,
+  execAsyncAll,
   kill,
   which,
   killPort
