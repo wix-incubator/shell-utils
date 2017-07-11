@@ -1,6 +1,6 @@
 {
   "name": "shell-utils",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Utilities for shell integration in node",
   "license": "MIT",
   "author": "Daniel Zlotin <zlotindaniel@gmail.com>",
