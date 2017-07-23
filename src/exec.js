@@ -19,7 +19,7 @@ function execSyncSilent(command) {
 function execSyncRead(command) {
   const normalized = normalizeSpace(command);
   console.log(normalized);
-  return _.trim(String(cp.execSync(normalized, { stdio: ['inherit', 'pipe', 'inherit'] })));
+  return _.trim(String(cp.execSync(normalized, { stdio: ['pipe', 'pipe', 'pipe'] })));
 }
 
 function execAsync(command, silent = false) {

@@ -66,6 +66,15 @@ describe('exec', () => {
     expect(result).toEqual('hello world!');
   });
 
+  it('execSyncRead returns the stderr into thrown exception', () => {
+    try {
+      uut.execSyncRead(`npm view 999999999`);
+      fail('should throw');
+    } catch (e) {
+      expect(e.toString()).toContain(`Registry returned 404 for GET`);
+    }
+  });
+
   it('execSyncRead throws on exception', () => {
     expect(() => uut.execSyncRead(`invalid command`)).toThrow();
   });
