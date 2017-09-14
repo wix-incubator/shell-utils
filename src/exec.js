@@ -18,8 +18,18 @@ function execSyncSilent(command) {
 
 function execSyncRead(command) {
   const normalized = normalizeSpace(command);
+  if (_.isEmpty(normalized)) {
+    return '';
+  }
   console.log(normalized);
   return _.trim(String(cp.execSync(normalized, { stdio: ['pipe', 'pipe', 'pipe'] })));
+}
+
+function execAsyncRead(command) {
+  const normalized = normalizeSpace(command);
+  console.log(normalized);
+  return execAsync(command).then((resolve) => {
+    return _.trim(String(resolve.stdout))});
 }
 
 function execAsync(command, silent = false) {
@@ -73,6 +83,7 @@ module.exports = {
   execSync,
   execSyncSilent,
   execSyncRead,
+  execAsyncRead,
   execAsync,
   execAsyncSilent,
   execAsyncAll,

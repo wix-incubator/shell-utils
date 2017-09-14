@@ -66,6 +66,22 @@ describe('exec', () => {
     expect(result).toEqual('hello world!');
   });
 
+  it('execAsyncRead returns the stdout as string', async () => {
+    uut.execSync(`echo "hello world!" > ${TESTFILE}`);
+    const result = await uut.execAsyncRead(`cat ${TESTFILE}`);
+    expect(result).toEqual('hello world!');
+  });
+
+  it('execAsyncRead should reject on invalid command', async () => {
+
+    try {
+      const result = await uut.execAsyncRead(`invalid command`);
+      fail('should throw');
+    } catch (e) {
+      expect(e).toBeDefined();
+    }
+  });
+
   it('execSyncRead returns the stderr into thrown exception', () => {
     try {
       uut.execSyncRead(`npm view 999999999`);
