@@ -16,25 +16,28 @@ function execSyncSilent(command) {
   }
 }
 
-function execSyncRead(command) {
+function execSyncRead(command, silent = false) {
   const normalized = normalizeSpace(command);
   if (_.isEmpty(normalized)) {
     return '';
   }
-  console.log(normalized);
+  if (!silent) {
+    console.log(normalized);
+  }
   return _.trim(String(cp.execSync(normalized, { stdio: ['pipe', 'pipe', 'pipe'] })));
 }
 
-function execAsyncRead(command) {
-  const normalized = normalizeSpace(command);
-  console.log(normalized);
-  return execAsync(command).then((resolve) => {
-    return _.trim(String(resolve.stdout))});
+function execAsyncRead(command, silent = false) {
+  return execAsync(command, silent).then((resolve) => {
+    return _.trim(String(resolve.stdout))
+  });
 }
 
 function execAsync(command, silent = false) {
   const normalized = normalizeSpace(command);
-  if (!silent) console.log(normalized);
+  if (!silent) {
+    console.log(normalized);
+  }
   return new Promise((resolve, reject) => {
     const child = cp.exec(normalized, { maxBuffer: 1024 * 1024 * 10 }, (err, stdout, stderr) => {
       if (err && !silent) {

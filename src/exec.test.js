@@ -47,7 +47,7 @@ describe('exec', () => {
     expect(fs.existsSync(TESTFILE)).toEqual(true);
     expect(console.log).not.toHaveBeenCalled();
   });
-
+  
   it('execSyncSilent swallows exceptions', () => {
     uut.execSyncSilent(`invalid command`);
   });
@@ -66,10 +66,24 @@ describe('exec', () => {
     expect(result).toEqual('hello world!');
   });
 
+  it('execSyncRead with silent param', () => {
+    uut.execSyncSilent(`echo "hello world!" > ${TESTFILE}`);
+    const result = uut.execSyncRead(`cat ${TESTFILE}`, true);
+    expect(result).toEqual('hello world!');
+    expect(console.log).not.toHaveBeenCalled();
+  });
+
   it('execAsyncRead returns the stdout as string', async () => {
     uut.execSync(`echo "hello world!" > ${TESTFILE}`);
     const result = await uut.execAsyncRead(`cat ${TESTFILE}`);
     expect(result).toEqual('hello world!');
+  });
+
+  it('execAsyncRead with silent param', async () => {
+    uut.execSyncSilent(`echo "hello world!" > ${TESTFILE}`);
+    const result = await uut.execAsyncRead(`cat ${TESTFILE}`, true);
+    expect(result).toEqual('hello world!');
+    expect(console.log).not.toHaveBeenCalled();
   });
 
   it('execAsyncRead should reject on invalid command', async () => {
