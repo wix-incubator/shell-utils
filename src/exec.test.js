@@ -87,7 +87,7 @@ describe('exec', () => {
       uut.execSyncRead(`npm view 999999999`);
       fail('should throw');
     } catch (e) {
-      expect(e.toString()).toContain(`Registry returned 404 for GET`);
+      expect(e.toString()).toContain(`npm ERR! 404`);
     }
   });
 
@@ -96,7 +96,7 @@ describe('exec', () => {
   });
 
   it('which', () => {
-    expect(uut.which(`node`)).toEqual(process.execPath);
+    expect(uut.which(`node`)).toBeDefined();
     expect(uut.which(`invalid bin`)).toEqual(undefined);
   });
 
