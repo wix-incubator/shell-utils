@@ -24,7 +24,7 @@ function execSyncRead(command, silent = false) {
   if (!silent) {
     console.log(normalized);
   }
-  return _.trim(String(cp.execSync(normalized, { stdio: ['inherit', 'pipe', silent ? 'pipe' : 'inherit'] })));
+  return _.trim(String(cp.execSync(normalized, { stdio: ['pipe', 'pipe', 'pipe'] })));
 }
 
 function execAsyncRead(command, silent = false) {
