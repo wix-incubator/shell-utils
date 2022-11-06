@@ -1,0 +1,14 @@
+name: Unit tests
+on:
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize, closed]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Yarn install
+        run: yarn
+      - name: Run unit tests
+        run: yarn test
