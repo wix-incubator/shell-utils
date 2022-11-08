@@ -47,7 +47,7 @@ describe('exec', () => {
     expect(fs.existsSync(TESTFILE)).toEqual(true);
     expect(console.log).not.toHaveBeenCalled();
   });
-  
+
   it('execSyncSilent swallows exceptions', () => {
     uut.execSyncSilent(`invalid command`);
   });
@@ -56,8 +56,12 @@ describe('exec', () => {
     expect(() => uut.execSync(`invalid command`)).toThrow();
   });
 
-  it('handles empty input', () => {
+  it('execSyncRead handles empty input', () => {
     expect(uut.execSyncRead()).toEqual('');
+  });
+
+  it('execSyncReadStdout handles empty input', () => {
+    expect(uut.execSyncReadStdout()).toEqual('');
   });
 
   it('execSyncRead returns the stdout as string', () => {
@@ -69,6 +73,19 @@ describe('exec', () => {
   it('execSyncRead with silent param', () => {
     uut.execSyncSilent(`echo "hello world!" > ${TESTFILE}`);
     const result = uut.execSyncRead(`cat ${TESTFILE}`, true);
+    expect(result).toEqual('hello world!');
+    expect(console.log).not.toHaveBeenCalled();
+  });
+
+  it('execSyncReadStdout returns the stdout as string', () => {
+    uut.execSync(`echo "hello world!" > ${TESTFILE}`);
+    const result = uut.execSyncReadStdout(`cat ${TESTFILE}`);
+    expect(result).toEqual('hello world!');
+  });
+
+  it('execSyncReadStdout with silent param', () => {
+    uut.execSyncSilent(`echo "hello world!" > ${TESTFILE}`);
+    const result = uut.execSyncReadStdout(`cat ${TESTFILE}`, true);
     expect(result).toEqual('hello world!');
     expect(console.log).not.toHaveBeenCalled();
   });
@@ -87,7 +104,6 @@ describe('exec', () => {
   });
 
   it('execAsyncRead should reject on invalid command', async () => {
-
     try {
       const result = await uut.execAsyncRead(`invalid command`);
       fail('should throw');
@@ -107,6 +123,20 @@ describe('exec', () => {
 
   it('execSyncRead throws on exception', () => {
     expect(() => uut.execSyncRead(`invalid command`)).toThrow();
+  });
+
+  it('execSyncRead prints only stdout into thrown exception', () => {
+    try {
+      uut.execSyncReadStdout(`npm view 999999999`);
+      fail('should throw');
+    } catch (e) {
+      expect(e.toString()).not.toContain(`npm ERR! 404`);
+      expect(e.toString()).toContain(`Error: Command failed: npm view`);
+    }
+  });
+
+  it('execSyncRead throws on exception', () => {
+    expect(() => uut.execSyncReadStdout(`invalid command`)).toThrow();
   });
 
   it('which', () => {

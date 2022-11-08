@@ -27,6 +27,17 @@ function execSyncRead(command, silent = false) {
   return _.trim(String(cp.execSync(normalized, { stdio: ['pipe', 'pipe', 'pipe'] })));
 }
 
+function execSyncReadStdout(command, silent = false) {
+  const normalized = normalizeSpace(command);
+  if (_.isEmpty(normalized)) {
+    return '';
+  }
+  if (!silent) {
+    console.log(normalized);
+  }
+  return _.trim(String(cp.execSync(normalized, { stdio: ['inherit', 'pipe', 'inherit'] })));
+}
+
 function execAsyncRead(command, silent = false) {
   return execAsync(command, silent).then((resolve) => {
     return _.trim(String(resolve.stdout))
@@ -86,6 +97,7 @@ module.exports = {
   execSync,
   execSyncSilent,
   execSyncRead,
+  execSyncReadStdout,
   execAsyncRead,
   execAsync,
   execAsyncSilent,
